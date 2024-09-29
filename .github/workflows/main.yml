@@ -36,12 +36,28 @@ jobs:
           @echo off
           set VS_PATH=""
           for /f "tokens=*" %%i in ('"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath') do set VS_PATH=%%i
-          echo "VCTools Path: %VS_PATH%\VC\Auxiliary\Build"
+          echo "vcvars64 Path: %VS_PATH%\VC\Auxiliary\Build"
           call "%VS_PATH%\VC\Auxiliary\Build\vcvars64.bat"
           
-          for /f "delims=" %%i in ('"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath') do set VS_PATH=%%i
-          echo "VCTools Path: %VS_PATH%\VC\Tools\MSVC"
-          set PATH=%PATH%;%VS_PATH%\Common7\IDE;%VS_PATH%\VC\Tools\MSVC\14.16.27023\bin\Hostx64\x64
+          rem Get the installation path of Visual Studio
+          for /f "tokens=*" %%i in ('"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath') do set VS_PATH=%%i
+
+          rem Get the MSVC version from the directory
+          for /f "delims=" %%v in ('dir /b /ad "%VS_PATH%\VC\Tools\MSVC"') do (
+            set VCToolsVersion=%%v
+          )
+          
+          rem Set the VCTools Path
+          set VCToolsPath=%VS_PATH%\VC\Tools\MSVC\%VCToolsVersion%
+
+          echo "VCTools Path: %VCToolsPath%"
+          
+          rem Add the necessary paths to the environment
+          set PATH=%PATH%;%VCToolsPath%\bin\Hostx64\x64;%VS_PATH%\Common7\IDE
+
+      # Step 5: Print nmake path
+      - name: Print nmake path
+        run: where nmake || echo "nmake not found"
 
       # Step 5: Build the project using Ant with MSVC
       - name: Build with Ant
