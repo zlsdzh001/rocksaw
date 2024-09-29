@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MyProject" default="jar" basedir=".">
+
+    <!-- Define properties -->
+    <property name="jni.cc" value="cl"/>
+    <property name="jni.make" value="nmake"/>
+    <property name="jni.makefile" value="Makefile.win32"/>
+    <property name="output.dir" value="build"/>
+    <property name="lib.name" value="rocksaw"/>
+    <property name="lib.extension" value="dll"/>
+
+    <!-- Clean task: clean up compiled files -->
+    <target name="clean">
+        <echo message="Cleaning build directory..."/>
+        <delete dir="${output.dir}"/>
+        <delete>
+            <fileset dir="." includes="*.${lib.extension}"/>
+            <fileset dir="." includes="*.lib"/>
+            <fileset dir="." includes="*.exp"/>
+        </delete>
+    </target>
+
+    <!-- Compile task: run nmake with Makefile.win32 -->
+    <target name="compile">
+        <mkdir dir="${output.dir}"/>
+        <echo message="Compiling project using nmake with ${jni.makefile}..."/>
+        <exec executable="${jni.make}">
+            <arg value="-f"/>
+            <arg value="${jni.makefile}"/>
+        </exec>
+    </target>
+
+    <!-- Jar task: package the result -->
+    <target name="jar" depends="compile">
+        <echo message="Creating JAR file..."/>
+        <mkdir dir="${output.dir}/lib"/>
+        <!-- Assuming compiled files or other outputs are placed in output.dir -->
+        <jar destfile="${output.dir}/lib/${ant.project.name}.jar" basedir="${output.dir}">
+            <!-- Include other artifacts as necessary -->
+            <include name="**/*.class"/>
+        </jar>
+    </target>
+
+    <!-- Default task: clean, compile, and package into a JAR -->
+    <target name="all" depends="clean, jar">
+        <echo message="Build completed successfully."/>
+    </target>
+</project>
