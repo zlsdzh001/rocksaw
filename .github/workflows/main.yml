@@ -29,11 +29,14 @@ jobs:
       - name: Install Ant
         run: choco install ant -y
 
-      # Step 4: Set up Visual Studio environment
+      # Step 4: Set up MSVC build tools using vswhere
       - name: Set up MSVC build tools
         shell: cmd
         run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
+          @echo off
+          set VS_PATH=""
+          for /f "tokens=*" %%i in ('"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath') do set VS_PATH=%%i
+          call "%VS_PATH%\VC\Auxiliary\Build\vcvars64.bat"
 
       # Step 5: Build the project using Ant with MSVC
       - name: Build with Ant
