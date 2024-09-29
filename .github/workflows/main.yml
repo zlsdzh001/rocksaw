@@ -17,9 +17,12 @@ jobs:
       - name: Set up MSVC build tools
         run: |
           cmd /c "\"C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat\" amd64"
-          cmd /c "set > vars.txt"  # 输出所有环境变量
-          cmd /c "echo PATH: %PATH% >> vars.txt"  # 输出 PATH
-          cmd /c "type vars.txt"  # 显示 vars.txt 内容
+
+      - name: Output environment variables
+        run: |
+          cmd /c "set > env_vars.txt"
+          cmd /c "echo PATH: %PATH% >> env_vars.txt"
+          cmd /c "type env_vars.txt"
 
       - name: Check nmake
         run: cmd /c "where nmake || echo nmake not found"
