@@ -41,7 +41,7 @@ jobs:
       # Step 5: Build the project using Ant with MSVC
       - name: Build with Ant
         run: |
-          ant -Djni.cc=cl -Djni.make=nmake -Djni.makefile=Makefile.win32 jar
+          ant all
 
       # Step 6: Optional - Upload the built artifacts (e.g., JAR, DLL)
       - name: Upload build artifacts
