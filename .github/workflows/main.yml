@@ -15,13 +15,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Visual Studio
-        uses: actions/setup-msbuild@v1
-        with:
-          vs-version: 'latest'  # 或指定具体版本，如 '2019'
+      - name: Install Visual Studio Build Tools
+        run: |
+          choco install visualstudio2019buildtools --version 16.11.3 --params "'/Features ComponentId'"
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x86  # 根据需要调整路径和架构
+
 
       - name: Build with nmake
         run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x86  # 根据需要调整路径和架构
           cd src/main/native
           nmake -f Makefile.win32  # 使用指定的 Makefile 进行构建
