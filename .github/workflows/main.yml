@@ -42,6 +42,12 @@ jobs:
           for /f "tokens=*" %%j in ('dir /b /s "%VS_PATH%\VC\Tools\MSVC"') do set MSVC_TOOL_PATH=%%j
           set PATH=%PATH%;%VS_PATH%\Common7\IDE;%MSVC_TOOL_PATH%\bin\Hostx64\x64
 
+      - name: Print PATH
+        run: echo %PATH%
+
+      - name: Check nmake
+        run: where nmake || echo "nmake not found"
+
       # Step 5: Build the project using Ant with MSVC
       - name: Build with Ant
         run: |
