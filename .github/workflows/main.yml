@@ -18,7 +18,7 @@ jobs:
       - name: Set up Visual Studio
         uses: actions/setup-msbuild@v1
         with:
-          vs-version: '2019'  # 或指定具体版本，如 '2019'
+          vs-version: 'latest'  # 或指定具体版本，如 '2019'
 
       - name: Build with nmake
         run: |
