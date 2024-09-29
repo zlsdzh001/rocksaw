@@ -35,8 +35,12 @@ jobs:
         run: |
           @echo off
           set VS_PATH=""
-          for /f "tokens=*" %%i in ('"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath') do set VS_PATH=%%i
+          for /f "tokens=*" %%i in ('"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath") do set VS_PATH=%%i
           call "%VS_PATH%\VC\Auxiliary\Build\vcvars64.bat"
+
+          REM Dynamically build the path for MSVC tools
+          for /f "tokens=*" %%j in ('dir /b /s "%VS_PATH%\VC\Tools\MSVC"') do set MSVC_TOOL_PATH=%%j
+          set PATH=%PATH%;%VS_PATH%\Common7\IDE;%MSVC_TOOL_PATH%\bin\Hostx64\x64
 
       # Step 5: Build the project using Ant with MSVC
       - name: Build with Ant
