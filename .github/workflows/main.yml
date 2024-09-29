@@ -14,20 +14,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install Visual Studio Build Tools
-        uses: microsoft/setup-msbuild@v1.1
-        with:
-          vs_version: '2019'  # 指定 VS 版本
-
       - name: Set up MSVC build tools
         run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" amd64
-          set > vars.txt
-          echo "PATH: %PATH%" >> vars.txt
-          type vars.txt
+          cmd /c "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" amd64
+          set > vars.txt  # 输出所有环境变量
+          echo "PATH: %PATH%" >> vars.txt  # 输出 PATH
+          type vars.txt  # 显示 vars.txt 内容
 
       - name: Check nmake
-        run: where nmake || echo "nmake not found"
+        run: cmd /c where nmake || echo "nmake not found"
 
       - name: Run Ant Build
         run: |
