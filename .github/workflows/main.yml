@@ -1,0 +1,47 @@
+name: Build Project on Windows
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      # Step 1: Checkout the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Java 8 environment (make sure JAVA_HOME is set correctly)
+      - name: Set up JDK 8
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+
+      # Step 3: Install Apache Ant (since it's required for your build)
+      - name: Install Ant
+        run: choco install ant -y
+
+      # Step 4: Set up Visual Studio environment
+      - name: Set up MSVC build tools
+        shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
+
+      # Step 5: Build the project using Ant with MSVC
+      - name: Build with Ant
+        run: |
+          ant -Djni.cc=cl -Djni.make=nmake -Djni.makefile=Makefile.win32 jar
+
+      # Step 6: Optional - Upload the built artifacts (e.g., JAR, DLL)
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: build/  # Specify your build output directory here
