@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="MyProject" default="jar" basedir=".">
+<project name="MyProject" default="all" basedir=".">
 
     <!-- Define properties -->
     <property name="jni.cc" value="cl"/>
     <property name="jni.make" value="nmake"/>
-    <property name="jni.makefile" value="Makefile.win32"/>
-    <property name="output.dir" value="build"/>
+    <property name="jni.makefile" value="src/main/native/Makefile.win32"/>  <!-- 更新为绝对路径 -->
+    <property name="output.dir" value="src/main/native/build"/>  <!-- 更新为输出路径 -->
     <property name="lib.name" value="rocksaw"/>
     <property name="lib.extension" value="dll"/>
 
