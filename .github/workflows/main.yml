@@ -3,7 +3,7 @@ name: Build with nmake
 on:
   push:
     branches:
-      - main  # 或其他你想要触发构建的分支
+      - master  # 或其他你想要触发构建的分支
   pull_request:
   workflow_dispatch:
 
